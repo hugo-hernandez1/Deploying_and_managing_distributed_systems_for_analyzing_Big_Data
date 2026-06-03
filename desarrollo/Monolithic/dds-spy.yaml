@@ -1,0 +1,107 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fastddsspy-final-config
+data:
+  FASTDDSSPY_CONFIGURATION.yaml: |
+    version: v1.0
+
+    dds:
+      domain: 0
+      transport: udp
+      ignore-participant-flags: no_filter
+      ros2-types: false
+
+      xml:
+        files:
+          - /config/spy_profile.xml
+      dds-profile: "Spy_XML_Profile"
+
+      allowlist:
+        - name: "_fastdds_statistics_rtps_sent"
+          type: "*"
+        - name: "_fastdds_statistics_rtps_lost"
+          type: "*"
+
+      topics:
+        - name: "_fastdds_statistics_rtps_sent"
+          qos:
+            max-rx-rate: 5
+            downsampling: 10
+        - name: "_fastdds_statistics_rtps_lost"
+          qos:
+            max-rx-rate: 5
+            downsampling: 10
+
+    specs:
+      discovery-time: 10000
+      logging:
+        verbosity: error
+        stdout: true
+
+  spy_profile.xml: |
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <dds>
+      <profiles xmlns="http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles">
+        <participant profile_name="Spy_XML_Profile" is_default_profile="true">
+          <domainId>0</domainId>
+          <rtps>
+            <name>FastDDSSpyFinal</name>
+            <builtin>
+              <discovery_config>
+                <discoveryProtocol>SUPER_CLIENT</discoveryProtocol>
+                <discoveryServersList>
+                  <locator>
+                    <udpv4>
+                      <address>10.106.45.18</address>
+                      <port>11811</port>
+                    </udpv4>
+                  </locator>
+                </discoveryServersList>
+              </discovery_config>
+            </builtin>
+          </rtps>
+        </participant>
+      </profiles>
+    </dds>
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fastddsspy-final
+  labels:
+    app: fastddsspy-final
+spec:
+  nodeName: final
+  hostNetwork: true
+  dnsPolicy: ClusterFirstWithHostNet
+  restartPolicy: Never
+
+  containers:
+    - name: fastddsspy
+      image: hhlh1/ubuntu-fastddsspy:v1.4.0-secure
+      imagePullPolicy: IfNotPresent
+      stdin: true
+      tty: true
+      command:
+        - /bin/bash
+        - -lc
+      args:
+        - |
+          echo "Fast DDS Spy listo"
+          echo "Config: /config/FASTDDSSPY_CONFIGURATION.yaml"
+          echo "XML:    /config/spy_profile.xml"
+          echo ""
+          echo "Lanza:"
+          echo "  fastddsspy -c /config/FASTDDSSPY_CONFIGURATION.yaml"
+          sleep infinity
+
+      volumeMounts:
+        - name: config-vol
+          mountPath: /config
+
+  volumes:
+    - name: config-vol
+      configMap:
+        name: fastddsspy-final-config

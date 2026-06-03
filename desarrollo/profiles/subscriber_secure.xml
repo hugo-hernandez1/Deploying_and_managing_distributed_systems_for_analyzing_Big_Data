@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profiles xmlns="http://www.eprosima.com">
+
+    <participant profile_name="subscriber_participant_profile" is_default_profile="true">
+        <domainId>0</domainId>
+        <rtps>
+            <name>csv_subscriber_secure_participant</name>
+            
+            <propertiesPolicy>
+                <properties>
+                    <property>
+                        <name>dds.sec.auth.plugin</name>
+                        <value>builtin.PKI-DH</value>
+                    </property>
+                    <property>
+                        <name>dds.sec.auth.builtin.PKI-DH.identity_ca</name>
+                        <value>file:///workspace/pkis/identity_ca/identity_ca_cert.pem</value>
+                    </property>
+                    <property>
+                        <name>dds.sec.auth.builtin.PKI-DH.identity_certificate</name>
+                        <value>file:///workspace/pkis/identity_ca/certs/subscriber_identity_cert.pem</value>
+                    </property>
+                    <property>
+                        <name>dds.sec.auth.builtin.PKI-DH.private_key</name>
+                        <value>file:///workspace/pkis/identity_ca/private/subscriber_identity_key.pem</value>
+                    </property>
+
+                    <property>
+                        <name>dds.sec.access.plugin</name>
+                        <value>builtin.Access-Permissions</value>
+                    </property>
+                    <property>
+                        <name>dds.sec.access.builtin.Access-Permissions.permissions_ca</name>
+                        <value>file:///workspace/pkis/permissions_ca/permissions_ca_cert.pem</value>
+                    </property>
+                    <property>
+                        <name>dds.sec.access.builtin.Access-Permissions.governance</name>
+                        <value>file:///workspace/pkis/governance.smime</value>
+                    </property>
+                    <property>
+                        <name>dds.sec.access.builtin.Access-Permissions.permissions</name>
+                        <value>file:///workspace/pkis/permissions_smime/subscriber_permissions.smime</value>
+                    </property>
+
+                    <property>
+                        <name>dds.sec.crypto.plugin</name>
+                        <value>builtin.AES-GCM-GMAC</value>
+                    </property>
+                </properties>
+            </propertiesPolicy>
+        </rtps>
+    </participant>
+
+    <topic profile_name="topic_profile" is_default_profile="true">
+        <name>air_quality_mag12</name>
+        <dataType>AirSample</dataType>
+        <historyQos>
+            <kind>KEEP_LAST</kind>
+            <depth>10</depth>
+        </historyQos>
+        <resourceLimitsQos>
+            <max_samples>50</max_samples>
+            <max_instances>1</max_instances>
+            <max_samples_per_instance>50</max_samples_per_instance>
+        </resourceLimitsQos>
+    </topic>
+
+    <subscriber profile_name="subscriber_profile" is_default_profile="true">
+    </subscriber>
+
+    <data_reader profile_name="reader_profile" is_default_profile="true">
+        <qos>
+            <durability>
+                <kind>VOLATILE</kind>
+            </durability>
+            <reliability>
+                <kind>RELIABLE</kind>
+            </reliability>
+        </qos>
+        <topic>
+            <historyQos>
+                <kind>KEEP_LAST</kind>
+                <depth>10</depth>
+            </historyQos>
+            <resourceLimitsQos>
+                <max_samples>50</max_samples>
+                <max_instances>1</max_instances>
+                <max_samples_per_instance>50</max_samples_per_instance>
+            </resourceLimitsQos>
+        </topic>
+    </data_reader>
+
+</profiles>

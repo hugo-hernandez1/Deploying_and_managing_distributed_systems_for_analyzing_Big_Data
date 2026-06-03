@@ -1,0 +1,43 @@
+// ---------------------------------------------------------------------------
+// AirSample.idl
+//
+// Tipo base para las muestras crudas (flujo raw).
+//
+// Campos originales:
+//   - station, magnitud, year, month, day, hour, value, validity
+//
+// Campos NUEVOS de trazabilidad (instrumentación de métricas):
+//   - magnitude_id      : identificador lógico de flujo. Es el mismo valor que
+//                         'magnitud', pero explícito para que quede claro que
+//                         es la clave del stream a efectos de secuencia.
+//   - sequence_id       : contador monotónico creciente por magnitude_id,
+//                         asignado por el publicador. Permite detectar
+//                         discontinuidades (pérdidas) en recepción sin
+//                         depender de timestamps ni de sincronización de
+//                         relojes entre nodos.
+//   - origin_writer_id  : identificador lógico del origen (ej.: nombre del
+//                         proceso/host/pod). Útil cuando en un mismo domain
+//                         pueda haber más de un publicador por magnitud.
+//   - publish_ts_ns     : timestamp monotónico local del publicador en
+//                         nanosegundos desde epoch del reloj del sistema.
+//                         Se usa SOLO para medir latencia o tiempos de
+//                         recuperación, NUNCA como identificador de muestra.
+// ---------------------------------------------------------------------------
+
+struct AirSample
+{
+    string station;
+    long   magnitud;
+    long   year;
+    long   month;
+    long   day;
+    long   hour;
+    double value;
+    string validity;
+
+    // Trazabilidad para detección de pérdidas por discontinuidad.
+    long         magnitude_id;
+    long long    sequence_id;
+    string       origin_writer_id;
+    long long    publish_ts_ns;
+};

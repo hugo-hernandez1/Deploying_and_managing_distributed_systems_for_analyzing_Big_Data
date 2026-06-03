@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dds xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:noNamespaceSchemaLocation="omg_shared_ca_permissions.xsd">
+  <permissions>
+    <grant name="sensor_mag12_grant">
+      <subject_name>CN=sensor-mag12,O=eProsima,L=Tres Cantos,ST=MA,C=ES</subject_name>
+      <validity>
+        <not_before>2026-03-24T00:00:00</not_before>
+        <not_after>2036-03-24T00:00:00</not_after>
+      </validity>
+
+      <allow_rule>
+        <domains>
+          <id>0</id>
+        </domains>
+        <publish>
+          <topics>
+            <topic>air_quality_raw</topic>
+            <topic>_fastdds_statistics_*</topic>
+          </topics>
+        </publish>
+      </allow_rule>
+
+      <default>DENY</default>
+    </grant>
+  </permissions>
+</dds>

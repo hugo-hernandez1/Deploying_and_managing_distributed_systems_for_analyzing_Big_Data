@@ -1,0 +1,105 @@
+timestamp,node_id,scope_visible,topic,source_writer,target_reader,metric,value,unit,status,notes
+2026-04-17T12:41:49Z,monitor,domain,-,-,monitor,user_topics,0,count,sin muestras,no user topics discovered yet
+2026-04-17T12:42:19Z,monitor,domain,-,-,monitor,user_topics,0,count,sin muestras,no user topics discovered yet
+2026-04-17T12:42:49Z,monitor,domain,-,-,monitor,user_topics,0,count,sin muestras,no user topics discovered yet
+2026-04-17T12:43:19Z,monitor,domain,-,-,monitor,user_topics,0,count,sin muestras,no user topics discovered yet
+2026-04-17T12:43:49Z,monitor,domain,-,-,monitor,user_topics,0,count,sin muestras,no user topics discovered yet
+2026-04-17T12:44:19Z,monitor,domain,-,-,monitor,user_topics,0,count,sin muestras,no user topics discovered yet
+2026-04-17T12:44:49Z,monitor,domain,-,-,monitor,user_topics,0,count,sin muestras,no user topics discovered yet
+2026-04-17T12:45:19Z,monitor,domain,-,-,monitor,user_topics,0,count,sin muestras,no user topics discovered yet
+2026-04-17T12:45:49Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,aggregated_readers,latency_mean_us,2150.680577,us,mixto(finito+NaN),writers=1 readers=1
+2026-04-17T12:45:49Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,-,publication_throughput_sum_Bps,210177.559459,B/s,mixto(finito+NaN),n_writers=1
+2026-04-17T12:45:49Z,monitor,topic,air_quality_raw_fwd,-,aggregated_readers,subscription_throughput_sum_Bps,76661.439506,B/s,mixto(finito+NaN),n_readers=1
+2026-04-17T12:45:49Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=1
+2026-04-17T12:45:49Z,monitor,topic,air_quality_agg,aggregated_writers,aggregated_readers,latency_mean_us,3972.807960,us,mixto(finito+NaN),writers=1 readers=1
+2026-04-17T12:45:49Z,monitor,topic,air_quality_agg,aggregated_writers,-,publication_throughput_sum_Bps,222701.633923,B/s,mixto(finito+NaN),n_writers=1
+2026-04-17T12:45:49Z,monitor,topic,air_quality_agg,-,aggregated_readers,subscription_throughput_sum_Bps,64367.400510,B/s,mixto(finito+NaN),n_readers=1
+2026-04-17T12:45:49Z,monitor,topic,air_quality_agg,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=1
+2026-04-17T12:45:49Z,monitor,topic,air_quality_raw,aggregated_writers,aggregated_readers,latency_mean_us,3335.285358,us,mixto(finito+NaN),writers=3 readers=2
+2026-04-17T12:45:49Z,monitor,topic,air_quality_raw,aggregated_writers,-,publication_throughput_sum_Bps,11809.257855,B/s,mixto(finito+NaN),n_writers=3
+2026-04-17T12:45:49Z,monitor,topic,air_quality_raw,-,aggregated_readers,subscription_throughput_sum_Bps,175591.610928,B/s,mixto(finito+NaN),n_readers=2
+2026-04-17T12:45:49Z,monitor,topic,air_quality_raw,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=3
+2026-04-17T12:46:19Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,aggregated_readers,latency_mean_us,6854.060323,us,finito,writers=1 readers=1
+2026-04-17T12:46:19Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,-,publication_throughput_sum_Bps,252331.714630,B/s,finito,n_writers=1
+2026-04-17T12:46:19Z,monitor,topic,air_quality_raw_fwd,-,aggregated_readers,subscription_throughput_sum_Bps,81381.985496,B/s,finito,n_readers=1
+2026-04-17T12:46:19Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=1
+2026-04-17T12:46:19Z,monitor,topic,air_quality_agg,aggregated_writers,aggregated_readers,latency_mean_us,9397.387979,us,finito,writers=1 readers=1
+2026-04-17T12:46:19Z,monitor,topic,air_quality_agg,aggregated_writers,-,publication_throughput_sum_Bps,826842.449500,B/s,finito,n_writers=1
+2026-04-17T12:46:19Z,monitor,topic,air_quality_agg,-,aggregated_readers,subscription_throughput_sum_Bps,94300.694294,B/s,mixto(finito+NaN),n_readers=1
+2026-04-17T12:46:19Z,monitor,topic,air_quality_agg,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=1
+2026-04-17T12:46:19Z,monitor,topic,air_quality_raw,aggregated_writers,aggregated_readers,latency_mean_us,933.937634,us,finito,writers=3 readers=2
+2026-04-17T12:46:19Z,monitor,topic,air_quality_raw,aggregated_writers,-,publication_throughput_sum_Bps,13861.730384,B/s,finito,n_writers=3
+2026-04-17T12:46:19Z,monitor,topic,air_quality_raw,-,aggregated_readers,subscription_throughput_sum_Bps,206577.577546,B/s,finito,n_readers=2
+2026-04-17T12:46:19Z,monitor,topic,air_quality_raw,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=3
+2026-04-17T12:46:49Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,aggregated_readers,latency_mean_us,6707.297493,us,finito,writers=1 readers=1
+2026-04-17T12:46:49Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,-,publication_throughput_sum_Bps,77722.779247,B/s,finito,n_writers=1
+2026-04-17T12:46:49Z,monitor,topic,air_quality_raw_fwd,-,aggregated_readers,subscription_throughput_sum_Bps,59705.877198,B/s,finito,n_readers=1
+2026-04-17T12:46:49Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=1
+2026-04-17T12:46:49Z,monitor,topic,air_quality_agg,aggregated_writers,aggregated_readers,latency_mean_us,5457.702283,us,finito,writers=1 readers=1
+2026-04-17T12:46:49Z,monitor,topic,air_quality_agg,aggregated_writers,-,publication_throughput_sum_Bps,246336.750171,B/s,finito,n_writers=1
+2026-04-17T12:46:49Z,monitor,topic,air_quality_agg,-,aggregated_readers,subscription_throughput_sum_Bps,58404.220659,B/s,finito,n_readers=1
+2026-04-17T12:46:49Z,monitor,topic,air_quality_agg,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=1
+2026-04-17T12:46:49Z,monitor,topic,air_quality_raw,aggregated_writers,aggregated_readers,latency_mean_us,787.172467,us,finito,writers=3 readers=2
+2026-04-17T12:46:49Z,monitor,topic,air_quality_raw,aggregated_writers,-,publication_throughput_sum_Bps,13990.264592,B/s,finito,n_writers=3
+2026-04-17T12:46:49Z,monitor,topic,air_quality_raw,-,aggregated_readers,subscription_throughput_sum_Bps,101991.660958,B/s,finito,n_readers=2
+2026-04-17T12:46:49Z,monitor,topic,air_quality_raw,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=3
+2026-04-17T12:47:19Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,aggregated_readers,latency_mean_us,901.130002,us,finito,writers=1 readers=1
+2026-04-17T12:47:19Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,-,publication_throughput_sum_Bps,64173.986768,B/s,finito,n_writers=1
+2026-04-17T12:47:19Z,monitor,topic,air_quality_raw_fwd,-,aggregated_readers,subscription_throughput_sum_Bps,68035.461157,B/s,finito,n_readers=1
+2026-04-17T12:47:19Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=1
+2026-04-17T12:47:19Z,monitor,topic,air_quality_agg,aggregated_writers,aggregated_readers,latency_mean_us,3263.022503,us,finito,writers=1 readers=1
+2026-04-17T12:47:19Z,monitor,topic,air_quality_agg,aggregated_writers,-,publication_throughput_sum_Bps,194515.172839,B/s,finito,n_writers=1
+2026-04-17T12:47:19Z,monitor,topic,air_quality_agg,-,aggregated_readers,subscription_throughput_sum_Bps,86942.980220,B/s,finito,n_readers=1
+2026-04-17T12:47:19Z,monitor,topic,air_quality_agg,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=1
+2026-04-17T12:47:19Z,monitor,topic,air_quality_raw,aggregated_writers,aggregated_readers,latency_mean_us,393.201051,us,finito,writers=3 readers=2
+2026-04-17T12:47:19Z,monitor,topic,air_quality_raw,aggregated_writers,-,publication_throughput_sum_Bps,14042.734207,B/s,finito,n_writers=3
+2026-04-17T12:47:19Z,monitor,topic,air_quality_raw,-,aggregated_readers,subscription_throughput_sum_Bps,63799.739777,B/s,finito,n_readers=2
+2026-04-17T12:47:19Z,monitor,topic,air_quality_raw,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=3
+2026-04-17T12:47:49Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,aggregated_readers,latency_mean_us,849.754013,us,finito,writers=1 readers=1
+2026-04-17T12:47:49Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,-,publication_throughput_sum_Bps,57476.314622,B/s,finito,n_writers=1
+2026-04-17T12:47:49Z,monitor,topic,air_quality_raw_fwd,-,aggregated_readers,subscription_throughput_sum_Bps,60243.800180,B/s,finito,n_readers=1
+2026-04-17T12:47:49Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=1
+2026-04-17T12:47:49Z,monitor,topic,air_quality_agg,aggregated_writers,aggregated_readers,latency_mean_us,3195.272309,us,finito,writers=1 readers=1
+2026-04-17T12:47:49Z,monitor,topic,air_quality_agg,aggregated_writers,-,publication_throughput_sum_Bps,436055.029364,B/s,finito,n_writers=1
+2026-04-17T12:47:49Z,monitor,topic,air_quality_agg,-,aggregated_readers,subscription_throughput_sum_Bps,72518.010706,B/s,finito,n_readers=1
+2026-04-17T12:47:49Z,monitor,topic,air_quality_agg,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=1
+2026-04-17T12:47:49Z,monitor,topic,air_quality_raw,aggregated_writers,aggregated_readers,latency_mean_us,404.878736,us,finito,writers=3 readers=2
+2026-04-17T12:47:49Z,monitor,topic,air_quality_raw,aggregated_writers,-,publication_throughput_sum_Bps,14055.914210,B/s,finito,n_writers=3
+2026-04-17T12:47:49Z,monitor,topic,air_quality_raw,-,aggregated_readers,subscription_throughput_sum_Bps,62844.579257,B/s,finito,n_readers=2
+2026-04-17T12:47:49Z,monitor,topic,air_quality_raw,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=3
+2026-04-17T12:48:19Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,aggregated_readers,latency_mean_us,937.704490,us,finito,writers=1 readers=1
+2026-04-17T12:48:19Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,-,publication_throughput_sum_Bps,93964.763555,B/s,finito,n_writers=1
+2026-04-17T12:48:19Z,monitor,topic,air_quality_raw_fwd,-,aggregated_readers,subscription_throughput_sum_Bps,96650.782273,B/s,finito,n_readers=1
+2026-04-17T12:48:19Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=1
+2026-04-17T12:48:19Z,monitor,topic,air_quality_agg,aggregated_writers,aggregated_readers,latency_mean_us,3632.849837,us,finito,writers=1 readers=1
+2026-04-17T12:48:19Z,monitor,topic,air_quality_agg,aggregated_writers,-,publication_throughput_sum_Bps,178717.930933,B/s,finito,n_writers=1
+2026-04-17T12:48:19Z,monitor,topic,air_quality_agg,-,aggregated_readers,subscription_throughput_sum_Bps,100594.591380,B/s,finito,n_readers=1
+2026-04-17T12:48:19Z,monitor,topic,air_quality_agg,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=1
+2026-04-17T12:48:19Z,monitor,topic,air_quality_raw,aggregated_writers,aggregated_readers,latency_mean_us,421.904096,us,finito,writers=4 readers=2
+2026-04-17T12:48:19Z,monitor,topic,air_quality_raw,aggregated_writers,-,publication_throughput_sum_Bps,13992.696738,B/s,finito,n_writers=4
+2026-04-17T12:48:19Z,monitor,topic,air_quality_raw,-,aggregated_readers,subscription_throughput_sum_Bps,108251.427056,B/s,finito,n_readers=2
+2026-04-17T12:48:19Z,monitor,topic,air_quality_raw,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=4
+2026-04-17T12:48:49Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,aggregated_readers,latency_mean_us,1340.455839,us,finito,writers=1 readers=1
+2026-04-17T12:48:49Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,-,publication_throughput_sum_Bps,182617.425936,B/s,finito,n_writers=1
+2026-04-17T12:48:49Z,monitor,topic,air_quality_raw_fwd,-,aggregated_readers,subscription_throughput_sum_Bps,77109.913575,B/s,finito,n_readers=1
+2026-04-17T12:48:49Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=1
+2026-04-17T12:48:49Z,monitor,topic,air_quality_agg,aggregated_writers,aggregated_readers,latency_mean_us,2851.937355,us,finito,writers=1 readers=1
+2026-04-17T12:48:49Z,monitor,topic,air_quality_agg,aggregated_writers,-,publication_throughput_sum_Bps,301542.194159,B/s,finito,n_writers=1
+2026-04-17T12:48:49Z,monitor,topic,air_quality_agg,-,aggregated_readers,subscription_throughput_sum_Bps,79334.266307,B/s,finito,n_readers=1
+2026-04-17T12:48:49Z,monitor,topic,air_quality_agg,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=1
+2026-04-17T12:48:49Z,monitor,topic,air_quality_raw,aggregated_writers,aggregated_readers,latency_mean_us,535.741921,us,mixto(finito+NaN),writers=5 readers=2
+2026-04-17T12:48:49Z,monitor,topic,air_quality_raw,aggregated_writers,-,publication_throughput_sum_Bps,13967.220086,B/s,finito,n_writers=5
+2026-04-17T12:48:49Z,monitor,topic,air_quality_raw,-,aggregated_readers,subscription_throughput_sum_Bps,160450.345637,B/s,finito,n_readers=2
+2026-04-17T12:48:49Z,monitor,topic,air_quality_raw,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=5
+2026-04-17T12:49:19Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,aggregated_readers,latency_mean_us,9417.172531,us,finito,writers=1 readers=1
+2026-04-17T12:49:19Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,-,publication_throughput_sum_Bps,135061.906033,B/s,finito,n_writers=1
+2026-04-17T12:49:19Z,monitor,topic,air_quality_raw_fwd,-,aggregated_readers,subscription_throughput_sum_Bps,74124.230228,B/s,finito,n_readers=1
+2026-04-17T12:49:19Z,monitor,topic,air_quality_raw_fwd,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=1
+2026-04-17T12:49:19Z,monitor,topic,air_quality_agg,aggregated_writers,aggregated_readers,latency_mean_us,15193.254863,us,finito,writers=1 readers=1
+2026-04-17T12:49:19Z,monitor,topic,air_quality_agg,aggregated_writers,-,publication_throughput_sum_Bps,180414.540560,B/s,finito,n_writers=1
+2026-04-17T12:49:19Z,monitor,topic,air_quality_agg,-,aggregated_readers,subscription_throughput_sum_Bps,69619.155540,B/s,finito,n_readers=1
+2026-04-17T12:49:19Z,monitor,topic,air_quality_agg,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=1
+2026-04-17T12:49:19Z,monitor,topic,air_quality_raw,aggregated_writers,aggregated_readers,latency_mean_us,989.851210,us,mixto(finito+NaN),writers=5 readers=2
+2026-04-17T12:49:19Z,monitor,topic,air_quality_raw,aggregated_writers,-,publication_throughput_sum_Bps,13737.039687,B/s,finito,n_writers=5
+2026-04-17T12:49:19Z,monitor,topic,air_quality_raw,-,aggregated_readers,subscription_throughput_sum_Bps,107499.982747,B/s,finito,n_readers=2
+2026-04-17T12:49:19Z,monitor,topic,air_quality_raw,aggregated_writers,-,resent_datas_sum,,packets,NaN,n_writers=5

@@ -1,0 +1,185 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fastdds-final-agg-sub-profile
+data:
+  profile.xml: |
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <dds>
+      <profiles xmlns="http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles">
+        <participant profile_name="subscriber_participant_profile" is_default_profile="true">
+          <domainId>0</domainId>
+          <rtps>
+            <name>fastdds-final-agg-subscriber</name>
+            <builtin>
+              <discovery_config>
+                <discoveryProtocol>CLIENT</discoveryProtocol>
+                <discoveryServersList>
+                  <locator>
+                    <udpv4>
+                      <address>10.106.45.18</address>
+                      <port>11811</port>
+                    </udpv4>
+                  </locator>
+                </discoveryServersList>
+              </discovery_config>
+            </builtin>
+            <propertiesPolicy>
+              <properties>
+                <property><name>dds.sec.auth.plugin</name><value>builtin.PKI-DH</value></property>
+                <property><name>dds.sec.access.plugin</name><value>builtin.Access-Permissions</value></property>
+                <property><name>dds.sec.crypto.plugin</name><value>builtin.AES-GCM-GMAC</value></property>
+                <property><name>dds.sec.auth.builtin.PKI-DH.identity_ca</name><value>file:///certs/identity_ca_cert.pem</value></property>
+                <property><name>dds.sec.auth.builtin.PKI-DH.identity_certificate</name><value>file:///certs/subscriber_identity_cert.pem</value></property>
+                <property><name>dds.sec.auth.builtin.PKI-DH.private_key</name><value>file:///certs/subscriber_identity_key.pem</value></property>
+                <property><name>dds.sec.access.builtin.Access-Permissions.permissions_ca</name><value>file:///certs/permissions_ca_cert.pem</value></property>
+                <property><name>dds.sec.access.builtin.Access-Permissions.governance</name><value>file:///certs/governance.smime</value></property>
+                <property><name>dds.sec.access.builtin.Access-Permissions.permissions</name><value>file:///certs/subscriber_permissions.smime</value></property>
+                <property><name>dds.sec.crypto.builtin.AES-GCM-GMAC.rtps_protection_kind</name><value>ENCRYPT</value></property>
+              </properties>
+            </propertiesPolicy>
+          </rtps>
+        </participant>
+
+        <subscriber profile_name="subscriber_profile" is_default_profile="true">
+        </subscriber>
+
+        <topic profile_name="raw_topic_profile" is_default_profile="false">
+          <name>air_quality_raw_fwd</name>
+          <dataType>AirSample</dataType>
+        </topic>
+
+        <data_reader profile_name="raw_reader_profile" is_default_profile="false">
+          <topic>
+            <historyQos>
+              <kind>KEEP_LAST</kind>
+              <depth>1000</depth>
+            </historyQos>
+            <resourceLimitsQos>
+              <max_samples>2000</max_samples>
+              <max_instances>1</max_instances>
+              <max_samples_per_instance>1000</max_samples_per_instance>
+              <allocated_samples>1000</allocated_samples>
+              <extra_samples>50</extra_samples>
+            </resourceLimitsQos>
+          </topic>
+          <qos>
+            <durability><kind>TRANSIENT_LOCAL</kind></durability>
+            <reliability><kind>RELIABLE</kind></reliability>
+          </qos>
+        </data_reader>
+
+        <data_reader profile_name="agg_reader_profile" is_default_profile="false">
+          <topic>
+            <historyQos>
+              <kind>KEEP_LAST</kind>
+              <depth>1000</depth>
+            </historyQos>
+            <resourceLimitsQos>
+              <max_samples>2000</max_samples>
+              <max_instances>1</max_instances>
+              <max_samples_per_instance>1000</max_samples_per_instance>
+              <allocated_samples>1000</allocated_samples>
+              <extra_samples>50</extra_samples>
+            </resourceLimitsQos>
+          </topic>
+          <qos>
+            <durability><kind>TRANSIENT_LOCAL</kind></durability>
+            <reliability><kind>RELIABLE</kind></reliability>
+          </qos>
+        </data_reader>
+
+        <topic profile_name="agg_topic_profile" is_default_profile="false">
+          <name>air_quality_agg</name>
+          <dataType>AirQualityStats</dataType>
+        </topic>
+
+      </profiles>
+    </dds>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastdds-final-agg-sub-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastdds-final-agg-sub
+  template:
+    metadata:
+      labels:
+        app: fastdds-final-agg-sub
+    spec:
+      nodeName: final
+      containers:
+      - name: final-agg-subscriber
+        image: hhlh1/fastdds-csv-app:latest
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "400m"
+        imagePullPolicy: Always
+        command: ["/bin/bash", "-lc"]
+        args:
+          - |
+            mkdir -p /healthz
+            mkdir -p /data
+            echo ok > /healthz/ok
+            exec stdbuf -oL -eL /app/csv_final_agg_subscriber \
+              -c /config/profile.xml \
+              --influx-url http://influxdb:8086 \
+              --influx-token tfm-influx-admin-token-changeme \
+              --influx-org tfm \
+              --influx-bucket air_quality \
+              --report-csv /data/air_quality_report.csv \
+              --node-id final-subscriber
+        env:
+          - name: FASTDDS_DEFAULT_PROFILES_FILE
+            value: "/config/profile.xml"
+          - name: FASTRTPS_DEFAULT_PROFILES_FILE
+            value: "/config/profile.xml"
+          - name: FASTDDS_BUILTIN_TRANSPORTS
+            value: "UDPv4"
+          - name: FASTDDS_STATISTICS
+            value: "HISTORY_LATENCY_TOPIC;PUBLICATION_THROUGHPUT_TOPIC;SUBSCRIPTION_THROUGHPUT_TOPIC;RESENT_DATAS_TOPIC"
+        readinessProbe:
+          exec:
+            command: ["bash","-lc","test -f /healthz/ok"]
+          initialDelaySeconds: 1
+          periodSeconds: 1
+          timeoutSeconds: 1
+          failureThreshold: 3
+        livenessProbe:
+          exec:
+            command: ["bash","-lc","test -f /healthz/ok"]
+          initialDelaySeconds: 1
+          periodSeconds: 5
+          timeoutSeconds: 1
+          failureThreshold: 3
+        volumeMounts:
+          - name: config-vol
+            mountPath: /config
+          - name: certs-vol
+            mountPath: /certs
+            readOnly: true
+          - name: healthz
+            mountPath: /healthz
+          - name: final-sub-data
+            mountPath: /data
+      volumes:
+        - name: config-vol
+          configMap:
+            name: fastdds-final-agg-sub-profile
+        - name: certs-vol
+          secret:
+            secretName: dds-security-certs
+        - name: healthz
+          emptyDir: {}
+        - name: final-sub-data
+          hostPath:
+            path: /home/hugo/TFM/desarrollo/Cluster_final/data
+            type: DirectoryOrCreate

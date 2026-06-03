@@ -1,0 +1,87 @@
+MIME-Version: 1.0
+Content-Type: multipart/signed; protocol="application/x-pkcs7-signature"; micalg="sha-256"; boundary="----B86FF8CD6AE2491EFACCCC1F47521962"
+
+This is an S/MIME signed message
+
+------B86FF8CD6AE2491EFACCCC1F47521962
+Content-Type: text/plain
+
+<?xml version="1.0" encoding="UTF-8"?>
+<dds xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:noNamespaceSchemaLocation="omg_shared_ca_governance.xsd">
+
+  <domain_access_rules>
+    <domain_rule>
+      <domains>
+        <id_range>
+          <min>0</min>
+          <max>20</max>
+        </id_range>
+      </domains>
+
+      <allow_unauthenticated_participants>false</allow_unauthenticated_participants>
+      <enable_join_access_control>true</enable_join_access_control>
+
+      <discovery_protection_kind>ENCRYPT</discovery_protection_kind>
+      <liveliness_protection_kind>ENCRYPT</liveliness_protection_kind>
+      <rtps_protection_kind>ENCRYPT</rtps_protection_kind>
+
+      <topic_access_rules>
+        <topic_rule>
+          <topic_expression>*</topic_expression>
+          <enable_discovery_protection>true</enable_discovery_protection>
+          <enable_liveliness_protection>true</enable_liveliness_protection>
+          <enable_read_access_control>true</enable_read_access_control>
+          <enable_write_access_control>true</enable_write_access_control>
+          <metadata_protection_kind>ENCRYPT</metadata_protection_kind>
+          <data_protection_kind>ENCRYPT</data_protection_kind>
+        </topic_rule>
+      </topic_access_rules>
+
+    </domain_rule>
+  </domain_access_rules>
+</dds>
+
+------B86FF8CD6AE2491EFACCCC1F47521962
+Content-Type: application/x-pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+
+MIIGXwYJKoZIhvcNAQcCoIIGUDCCBkwCAQExDzANBglghkgBZQMEAgEFADALBgkq
+hkiG9w0BBwGgggOdMIIDmTCCAoGgAwIBAgIUUl0U6J4+7tIWKvkq4BaFehaZg6Qw
+DQYJKoZIhvcNAQELBQAwXDELMAkGA1UEBhMCRVMxCzAJBgNVBAgMAk1BMRQwEgYD
+VQQHDAtUcmVzIENhbnRvczERMA8GA1UECgwIZVByb3NpbWExFzAVBgNVBAMMDnBl
+cm1pc3Npb25zLWNhMB4XDTI2MDIwOTE4MjQxNVoXDTM2MDIwNzE4MjQxNVowXDEL
+MAkGA1UEBhMCRVMxCzAJBgNVBAgMAk1BMRQwEgYDVQQHDAtUcmVzIENhbnRvczER
+MA8GA1UECgwIZVByb3NpbWExFzAVBgNVBAMMDnBlcm1pc3Npb25zLWNhMIIBIjAN
+BgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqzxWOMR4sQt/gpNZ8JCyWufu81Lz
+RBfVM+eefOJZuKEE6KQ3m8BKAlgEYelmPV/38jPbckLA3TqnN2Mq+xOH9osioU4O
+Tptb2sQ4wS0N5fkCVF6FjFugn4tOweYOPpCTvzOE962MwrP6lIuh0yOuVzX6kxUV
+IPTdD4TYZD0RLfnAqBV9DqD/jwUgpSC3B+VK2kuoPNeIOcikt7zVkwNxFTKPxKga
+8LWiFCB9l19xmyYMclLNUlzns3CSI20HVONgNG5B54DaSfph4wFx00Il2Dgc+CJ4
+ySB3lDXK31UIkhq/GgyvgHDDshhYTp1fxmBYUd9OSpfvrUbTd/gCpwnnMQIDAQAB
+o1MwUTAdBgNVHQ4EFgQUSoYZZtg1/srqzUrcxaJgBPWcWCUwHwYDVR0jBBgwFoAU
+SoYZZtg1/srqzUrcxaJgBPWcWCUwDwYDVR0TAQH/BAUwAwEB/zANBgkqhkiG9w0B
+AQsFAAOCAQEAWgWmTagAyqOu160mTvcE5/pE+hMJN3nilO9ZF3huVZTy9S3aCAIY
+qW+IHLyLIr9vVhxWER0gA380dk3jZm9d9EyMnFK69iXCDg9V9Tg4A/rfd9ratARQ
+jKZQtq96JaeOB4qImJpkWGjRfMxUlFGSGNWPxBTeqTFBmy/OVLuzQqsYWu15/ud8
+ZkisT/EIxEECvy72ONE+GuXD8bjx/ZwLPtnAC903KcHZzNHe/CtbxqcLiYXs6m4n
+8N0zmA6FiYUf/pW9EaGzkN5eAdyrychyhX59OzjgusZldLQm6yf9w+Evta3B8qeK
+1/lwHaDKmfrBTWg+43jP76kb8dBWZ6QKxzGCAoYwggKCAgEBMHQwXDELMAkGA1UE
+BhMCRVMxCzAJBgNVBAgMAk1BMRQwEgYDVQQHDAtUcmVzIENhbnRvczERMA8GA1UE
+CgwIZVByb3NpbWExFzAVBgNVBAMMDnBlcm1pc3Npb25zLWNhAhRSXRTonj7u0hYq
++SrgFoV6FpmDpDANBglghkgBZQMEAgEFAKCB5DAYBgkqhkiG9w0BCQMxCwYJKoZI
+hvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yNjAzMjQxMjQyMjJaMC8GCSqGSIb3DQEJ
+BDEiBCANJovve5/MbSJoq2oepn8d/75hoyGbMzL/EelOgvMwUjB5BgkqhkiG9w0B
+CQ8xbDBqMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJYIZIAWUDBAECMAoG
+CCqGSIb3DQMHMA4GCCqGSIb3DQMCAgIAgDANBggqhkiG9w0DAgIBQDAHBgUrDgMC
+BzANBggqhkiG9w0DAgIBKDANBgkqhkiG9w0BAQEFAASCAQAfoXrppXl1IVL1yJh/
+h3HEXOdHzIrLTx7TtAdC4o18nCHKqjaDDOCoSDRwv/2X980m1mQ7kJGDKb4/db+N
+dKClZWciWbRH5uMypBDFFDsgWYW2efUhoLpEcZIADM40DE/jzZJudL3V56Jqc37m
+URSmeJ8zf8vZRYN+ojvImotjhcX2KorJYds1ECpthDuTCWN0zITbqKh38Zsx7BD2
+uHAxasFkpJyw7K3RVCeugMw6ZhEUESST0YH3RU5j5nejPNAO7VnHHbp7kCykW0rs
+6LcMoJkQxOyJxnbbLXCNAA/npOQCi1r+KTBUHr3LNr8AVIiQyY85d4nJbHXkK3d1
+fjnX
+
+------B86FF8CD6AE2491EFACCCC1F47521962--
+

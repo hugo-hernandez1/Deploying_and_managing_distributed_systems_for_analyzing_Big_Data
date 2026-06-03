@@ -1,0 +1,136 @@
+# ==========================================================
+# 1. CONFIGMAP (PERFIL EXCLUSIVO PARA SERVIDOR)
+# ==========================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fastdds-server-profile
+data:
+  profile.xml: |
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <dds>
+      <profiles xmlns="http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles">
+        <participant profile_name="Secure_Server_Profile" is_default_profile="true">
+          <rtps>
+            <prefix>44.53.00.5f.45.50.52.4f.53.49.4d.43</prefix>
+              <builtin>
+                <discovery_config>
+                  <discoveryProtocol>SERVER</discoveryProtocol>
+                </discovery_config>
+                <metatrafficUnicastLocatorList>
+                  <locator>
+                    <udpv4>
+                      <address>0.0.0.0</address>
+                      <port>11811</port>
+                    </udpv4>
+                  </locator>
+                </metatrafficUnicastLocatorList>
+              </builtin>
+                      <propertiesPolicy>
+                        <properties>
+                            <property>
+                                <name>dds.sec.auth.plugin</name>
+                                <value>builtin.PKI-DH</value>
+                            </property>
+                            <property>
+                                <name>dds.sec.access.plugin</name>
+                                <value>builtin.Access-Permissions</value>
+                            </property>
+                            <property>
+                                <name>dds.sec.crypto.plugin</name>
+                                <value>builtin.AES-GCM-GMAC</value>
+                            </property>
+
+                            <property><name>dds.sec.auth.builtin.PKI-DH.identity_ca</name>
+                                    <value>file:///certs/identity_ca_cert.pem</value></property>
+
+                            <property><name>dds.sec.auth.builtin.PKI-DH.identity_certificate</name>
+                                    <value>file:///certs/server_final_identity_cert.pem</value></property>
+
+                            <property><name>dds.sec.auth.builtin.PKI-DH.private_key</name>
+                                    <value>file:///certs/server_final_identity_key.pem</value></property>
+                            
+                            
+                            <property><name>dds.sec.access.builtin.Access-Permissions.permissions_ca</name>
+                                    <value>file:///certs/permissions_ca_cert.pem</value></property>
+
+                            <property><name>dds.sec.access.builtin.Access-Permissions.governance</name>
+                                    <value>file:///certs/governance.smime</value></property>
+
+                            <property><name>dds.sec.access.builtin.Access-Permissions.permissions</name>
+                                    <value>file:///certs/server_final_permissions.smime</value></property>
+                            <property>
+                                <name>dds.sec.crypto.builtin.AES-GCM-GMAC.rtps_protection_kind</name>
+                                <value>ENCRYPT</value>
+                            </property>
+                        </properties>
+                    </propertiesPolicy>
+          </rtps>
+        </participant>
+      </profiles>
+    </dds>
+---
+# ==========================================================
+# 2. SERVICE (EL QUE FALTABA)
+# ==========================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: fastdds-discovery
+spec:
+  clusterIP: 10.106.45.18
+  selector:
+    app: discovery-server
+  ports:
+  - name: dds-discovery-udp
+    port: 11811
+    protocol: UDP
+    targetPort: 11811
+---
+# ==========================================================
+# 3. DEPLOYMENT (CON LA CORRECCIÓN DEL COMANDO)
+# ==========================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discovery-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: discovery-server
+  template:
+    metadata:
+      labels:
+        app: discovery-server
+    spec:
+      nodeName: final
+      containers:
+      - name: server
+        image: hhlh1/ubuntu-fastdds:v3.2.2
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        imagePullPolicy: IfNotPresent
+        command: ["/bin/bash", "-c"]
+        args:
+          - |
+            source /root/entrypoint.bash
+            fastdds discovery -x Secure_Server_Profile@/config/profile.xml
+        volumeMounts:
+          - name: server-config-vol
+            mountPath: /config
+          - name: certs-vol
+            mountPath: /certs
+            readOnly: true
+      volumes:
+        - name: server-config-vol
+          configMap:
+            name: fastdds-server-profile
+        - name: certs-vol
+          secret:
+            secretName: dds-security-certs

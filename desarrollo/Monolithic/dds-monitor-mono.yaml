@@ -1,0 +1,123 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fastdds-monitor-profile
+data:
+  profile.xml: |
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <dds>
+      <profiles xmlns="http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles">
+        <participant profile_name="Secure_Monitor_Profile" is_default_profile="true">
+          <rtps>
+            <builtin>
+              <discovery_config>
+                <discoveryProtocol>SUPER_CLIENT</discoveryProtocol>
+                <discoveryServersList>
+                  <locator>
+                    <udpv4>
+                      <address>10.106.45.18</address>
+                      <port>11811</port>
+                    </udpv4>
+                  </locator>
+                </discoveryServersList>
+              </discovery_config>
+            </builtin>
+            <propertiesPolicy>
+              <properties>
+                <property><name>dds.sec.auth.plugin</name><value>builtin.PKI-DH</value></property>
+                <property><name>dds.sec.access.plugin</name><value>builtin.Access-Permissions</value></property>
+                <property><name>dds.sec.crypto.plugin</name><value>builtin.AES-GCM-GMAC</value></property>
+                <property><name>dds.sec.auth.builtin.PKI-DH.identity_ca</name><value>file:///certs/identity_ca_cert.pem</value></property>
+                <property><name>dds.sec.auth.builtin.PKI-DH.identity_certificate</name><value>file:///certs/monitor_identity_cert.pem</value></property>
+                <property><name>dds.sec.auth.builtin.PKI-DH.private_key</name><value>file:///certs/monitor_identity_key.pem</value></property>
+                <property><name>dds.sec.access.builtin.Access-Permissions.permissions_ca</name><value>file:///certs/permissions_ca_cert.pem</value></property>
+                <property><name>dds.sec.access.builtin.Access-Permissions.governance</name><value>file:///certs/governance.smime</value></property>
+                <property><name>dds.sec.access.builtin.Access-Permissions.permissions</name><value>file:///certs/monitor_permissions.smime</value></property>
+                <property><name>dds.sec.crypto.builtin.AES-GCM-GMAC.rtps_protection_kind</name><value>ENCRYPT</value></property>
+              </properties>
+            </propertiesPolicy>
+          </rtps>
+        </participant>
+      </profiles>
+    </dds>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastdds-monitor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastdds-monitor
+  template:
+    metadata:
+      labels:
+        app: fastdds-monitor
+    spec:
+      nodeName: final
+      containers:
+      - name: monitor
+        image: hhlh1/fastdds-csv-app:latest
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "400m"
+        env:
+        - name: FASTDDS_DEFAULT_PROFILES_FILE
+          value: "/config/profile.xml"
+        - name: FASTRTPS_DEFAULT_PROFILES_FILE
+          value: "/config/profile.xml"
+        - name: FASTDDS_BUILTIN_TRANSPORTS
+          value: "UDPv4"
+        - name: FASTDDS_STATISTICS
+          value: "HISTORY_LATENCY_TOPIC;NETWORK_LATENCY_TOPIC;PUBLICATION_THROUGHPUT_TOPIC;SUBSCRIPTION_THROUGHPUT_TOPIC;RTPS_SENT_TOPIC;RTPS_LOST_TOPIC;HEARTBEAT_COUNT_TOPIC;ACKNACK_COUNT_TOPIC;NACKFRAG_COUNT_TOPIC;GAP_COUNT_TOPIC;DATA_COUNT_TOPIC;RESENT_DATAS_TOPIC;SAMPLE_DATAS_TOPIC;PDP_PACKETS_TOPIC;EDP_PACKETS_TOPIC;DISCOVERY_TOPIC;PHYSICAL_DATA_TOPIC"
+        command: ["/bin/bash", "-lc"]
+        args:
+          - |
+            mkdir -p /healthz
+            mkdir -p /data
+            echo ok > /healthz/ok
+            exec stdbuf -oL -eL /app/monitor \
+              --domain 0 \
+              --interval 30 \
+              -b 10 \
+              --report-csv /data/monitor_report.csv \
+              --node-id monitor
+        readinessProbe:
+          exec:
+            command: ["bash", "-lc", "test -f /healthz/ok"]
+          initialDelaySeconds: 2
+          periodSeconds: 5
+        livenessProbe:
+          exec:
+            command: ["bash", "-lc", "test -f /healthz/ok"]
+          initialDelaySeconds: 2
+          periodSeconds: 10
+        volumeMounts:
+        - name: monitor-config
+          mountPath: /config
+        - name: monitor-certs
+          mountPath: /certs
+          readOnly: true
+        - name: healthz
+          mountPath: /healthz
+        - name: monitor-data
+          mountPath: /data
+      volumes:
+      - name: monitor-config
+        configMap:
+          name: fastdds-monitor-profile
+      - name: monitor-certs
+        secret:
+          secretName: dds-security-certs
+      - name: healthz
+        emptyDir: {}
+      - name: monitor-data
+        hostPath:
+          path: /home/hugo/TFM/desarrollo/Monolithic/data
+          type: DirectoryOrCreate

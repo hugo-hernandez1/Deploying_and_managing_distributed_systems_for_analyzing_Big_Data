@@ -1,0 +1,160 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dds-router-pub1-config
+data:
+  router.yaml: |
+    version: v4.0
+    
+    allowlist:
+    - name: "air_quality_raw"
+    - name: "air_quality_raw_fwd"
+    - name: "air_quality_agg"
+
+    blocklist:
+      - name: "_fastdds_statistics_*"
+
+    xml:
+      raw: |
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <dds>
+          <profiles xmlns="http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles">
+            
+            <participant profile_name="DSClientPub1_XML_Profile">
+              <rtps>
+                <name>DSClientPub1</name>
+                <builtin>
+                  <discovery_config>
+                    <discoveryProtocol>SUPER_CLIENT</discoveryProtocol>
+                    <discoveryServersList>
+                      <locator>
+                        <udpv4>
+                          <address>10.106.45.16</address>
+                          <port>11811</port>
+                        </udpv4>
+                      </locator>
+                    </discoveryServersList>
+                  </discovery_config>
+                </builtin>
+                <propertiesPolicy>
+                  <properties>
+                    <property><name>dds.sec.auth.plugin</name><value>builtin.PKI-DH</value></property>
+                    <property><name>dds.sec.access.plugin</name><value>builtin.Access-Permissions</value></property>
+                    <property><name>dds.sec.crypto.plugin</name><value>builtin.AES-GCM-GMAC</value></property>
+                    <property><name>dds.sec.auth.builtin.PKI-DH.identity_ca</name><value>file:///certs/identity_ca_cert.pem</value></property>
+                    <property><name>dds.sec.auth.builtin.PKI-DH.identity_certificate</name><value>file:///certs/router_pub_identity_cert.pem</value></property>
+                    <property><name>dds.sec.auth.builtin.PKI-DH.private_key</name><value>file:///certs/router_pub_identity_key.pem</value></property>
+                    <property><name>dds.sec.access.builtin.Access-Permissions.permissions_ca</name><value>file:///certs/permissions_ca_cert.pem</value></property>
+                    <property><name>dds.sec.access.builtin.Access-Permissions.governance</name><value>file:///certs/governance.smime</value></property>
+                    <property><name>dds.sec.access.builtin.Access-Permissions.permissions</name><value>file:///certs/router_pub_permissions.smime</value></property>
+                    <property><name>dds.sec.crypto.builtin.AES-GCM-GMAC.rtps_protection_kind</name><value>ENCRYPT</value></property>
+                  </properties>
+                </propertiesPolicy>
+              </rtps>
+            </participant>
+
+            <transport_descriptors>
+              <transport_descriptor>
+                <transport_id>tcp_wan_pub1</transport_id>
+                <type>TCPv4</type>
+                <listening_ports>
+                  <port>31812</port>
+                </listening_ports>
+                <wan_addr>192.168.56.101</wan_addr>
+              </transport_descriptor>
+            </transport_descriptors>
+
+            <participant profile_name="WAN_Pub1_XML_Profile">
+              <rtps>
+                <name>WanPub1</name>
+                <useBuiltinTransports>false</useBuiltinTransports>
+                <userTransports>
+                  <transport_id>tcp_wan_pub1</transport_id>
+                </userTransports>
+                <builtin>
+                  <metatrafficUnicastLocatorList>
+                    <locator>
+                      <tcpv4>
+                        <address>192.168.56.101</address>
+                        <physical_port>31812</physical_port>
+                        <port>7410</port>
+                      </tcpv4>
+                    </locator>
+                  </metatrafficUnicastLocatorList>
+                </builtin>
+                <propertiesPolicy>
+                  <properties>
+                    <property><name>dds.sec.auth.plugin</name><value>builtin.PKI-DH</value></property>
+                    <property><name>dds.sec.access.plugin</name><value>builtin.Access-Permissions</value></property>
+                    <property><name>dds.sec.crypto.plugin</name><value>builtin.AES-GCM-GMAC</value></property>
+                    <property><name>dds.sec.auth.builtin.PKI-DH.identity_ca</name><value>file:///certs/identity_ca_cert.pem</value></property>
+                    <property><name>dds.sec.auth.builtin.PKI-DH.identity_certificate</name><value>file:///certs/router_pub_identity_cert.pem</value></property>
+                    <property><name>dds.sec.auth.builtin.PKI-DH.private_key</name><value>file:///certs/router_pub_identity_key.pem</value></property>
+                    <property><name>dds.sec.access.builtin.Access-Permissions.permissions_ca</name><value>file:///certs/permissions_ca_cert.pem</value></property>
+                    <property><name>dds.sec.access.builtin.Access-Permissions.governance</name><value>file:///certs/governance.smime</value></property>
+                    <property><name>dds.sec.access.builtin.Access-Permissions.permissions</name><value>file:///certs/router_pub_permissions.smime</value></property>
+                    <property><name>dds.sec.crypto.builtin.AES-GCM-GMAC.rtps_protection_kind</name><value>ENCRYPT</value></property>
+                  </properties>
+                </propertiesPolicy>
+              </rtps>
+            </participant>
+          </profiles>
+        </dds>
+
+    participants:
+      - name: "DSClientPub1"
+        kind: xml
+        profile: "DSClientPub1_XML_Profile"
+
+      - name: "WanPub1"
+        kind: xml
+        profile: "WAN_Pub1_XML_Profile"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dds-router-pub1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dds-router-pub1
+  template:
+    metadata:
+      labels:
+        app: dds-router-pub1
+    spec:
+      nodeName: pub1
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      initContainers:
+      - name: wait-for-discovery
+        image: busybox
+        command: ['sh', '-c', 'until nc -zu 10.106.45.16 11811; do echo waiting for discovery server pub1; sleep 2; done']
+      containers:
+        - name: router
+          image: hhlh1/ubuntu-fastdds-suite:v3.2.2-secure
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "400m"
+          command: ["/bin/bash", "-c"]
+          args:
+            - |
+              ddsrouter -c /config/router.yaml -d
+          volumeMounts:
+            - name: config-vol
+              mountPath: /config
+            - name: certs-vol
+              mountPath: /certs
+              readOnly: true
+      volumes:
+        - name: config-vol
+          configMap:
+            name: dds-router-pub1-config
+        - name: certs-vol
+          secret:
+            secretName: dds-security-certs

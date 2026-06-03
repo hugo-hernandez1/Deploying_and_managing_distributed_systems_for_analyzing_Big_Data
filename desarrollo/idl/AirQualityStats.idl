@@ -1,0 +1,68 @@
+// ---------------------------------------------------------------------------
+// AirQualityStats.idl
+//
+// Tipo del flujo agregado que emite csv_analysis_aggregator.
+//
+// Los campos originales representan el snapshot estadístico por
+// (station, magnitud).
+//
+// Campos NUEVOS de trazabilidad (instrumentación de métricas):
+//   - magnitude_id      : identificador lógico del flujo agregado. Coincide
+//                         con 'magnitud' (cada magnitud tiene su propia
+//                         secuencia de snapshots agregados).
+//   - sequence_id       : contador monotónico creciente por magnitude_id,
+//                         asignado por el aggregator al publicar cada
+//                         snapshot. Permite al receptor final detectar
+//                         pérdidas sobre la cadena intermedia→final.
+//   - origin_writer_id  : identificador lógico del nodo que emite.
+//   - publish_ts_ns     : timestamp monotónico del publicador (ns).
+//
+//   Además, para poder trazar "de qué muestras crudas viene cada snapshot"
+//   sin depender de timestamps:
+//   - src_first_seq     : sequence_id mínimo entre las AirSample que este
+//                         snapshot agrega (dentro de su magnitude_id).
+//   - src_last_seq      : sequence_id máximo entre esas AirSample.
+//   - src_sample_count  : número de AirSample que se han usado para generar
+//                         este snapshot.
+// ---------------------------------------------------------------------------
+
+struct AirQualityStats
+{
+    string station;
+    long   magnitud;
+
+    long year;
+    long month;
+    long day;
+    long hour;
+
+    double daily_mean;
+    double daily_min;
+    double daily_max;
+    long   daily_count;
+
+    double trend_slope;
+    string trend_label;
+
+    double  zscore;
+    double  zscore_mu;
+    double  zscore_sigma;
+    boolean zscore_valid;
+
+    boolean is_anomaly;
+    boolean is_spike;
+
+    string publish_reason;
+    string emitted_at;
+
+    // Trazabilidad para detección de pérdidas por discontinuidad.
+    long         magnitude_id;
+    long long    sequence_id;
+    string       origin_writer_id;
+    long long    publish_ts_ns;
+
+    // Rango de muestras crudas que resume este snapshot (ids lógicos).
+    long long    src_first_seq;
+    long long    src_last_seq;
+    long         src_sample_count;
+};

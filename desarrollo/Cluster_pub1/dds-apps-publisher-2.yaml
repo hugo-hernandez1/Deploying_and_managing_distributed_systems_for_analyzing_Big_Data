@@ -1,0 +1,142 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fastdds-pub-mag20-profile
+data:
+  profile.xml: |
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <dds>
+      <profiles xmlns="http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles">
+        <participant profile_name="publisher_participant_profile" is_default_profile="true">
+          <domainId>0</domainId>
+          <rtps>
+            <name>csv_publisher_participant_mag20</name>
+            <builtin>
+              <discovery_config>
+                <discoveryProtocol>CLIENT</discoveryProtocol>
+                <discoveryServersList>
+                  <locator>
+                    <udpv4>
+                      <address>10.106.45.16</address>
+                      <port>11811</port>
+                    </udpv4>
+                  </locator>
+                </discoveryServersList>
+              </discovery_config>
+            </builtin>
+            <propertiesPolicy>
+              <properties>
+                <property><name>dds.sec.auth.plugin</name><value>builtin.PKI-DH</value></property>
+                <property><name>dds.sec.access.plugin</name><value>builtin.Access-Permissions</value></property>
+                <property><name>dds.sec.crypto.plugin</name><value>builtin.AES-GCM-GMAC</value></property>
+                <property><name>dds.sec.auth.builtin.PKI-DH.identity_ca</name><value>file:///certs/identity_ca_cert.pem</value></property>
+                <property><name>dds.sec.auth.builtin.PKI-DH.identity_certificate</name><value>file:///certs/sensor_mag20_identity_cert.pem</value></property>
+                <property><name>dds.sec.auth.builtin.PKI-DH.private_key</name><value>file:///certs/sensor_mag20_identity_key.pem</value></property>
+                <property><name>dds.sec.access.builtin.Access-Permissions.permissions_ca</name><value>file:///certs/permissions_ca_cert.pem</value></property>
+                <property><name>dds.sec.access.builtin.Access-Permissions.governance</name><value>file:///certs/governance.smime</value></property>
+                <property><name>dds.sec.access.builtin.Access-Permissions.permissions</name><value>file:///certs/sensor_mag20_permissions.smime</value></property>
+                <property><name>dds.sec.crypto.builtin.AES-GCM-GMAC.rtps_protection_kind</name><value>ENCRYPT</value></property>
+              </properties>
+            </propertiesPolicy>
+          </rtps>
+        </participant>
+
+        <publisher profile_name="publisher_profile" is_default_profile="true">
+        </publisher>
+        <topic profile_name="topic_profile" is_default_profile="true">
+          <name>air_quality_raw</name>
+          <dataType>AirSample</dataType>
+        </topic>
+
+        <data_writer profile_name="writer_profile" is_default_profile="true">
+          <topic>
+            <historyQos>
+              <kind>KEEP_LAST</kind>
+              <depth>200</depth>
+            </historyQos>
+            <resourceLimitsQos>
+              <max_samples>400</max_samples>
+              <max_instances>1</max_instances>
+              <max_samples_per_instance>200</max_samples_per_instance>
+              <allocated_samples>200</allocated_samples>
+              <extra_samples>50</extra_samples>
+            </resourceLimitsQos>
+          </topic>
+          <qos>
+            <durability>
+              <kind>TRANSIENT_LOCAL</kind>
+            </durability>
+            <reliability>
+              <kind>RELIABLE</kind>
+            </reliability>
+          </qos>
+        </data_writer>
+      </profiles>
+    </dds>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastdds-publisher-mag20-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastdds-pub-mag20
+  template:
+    metadata:
+      labels:
+        app: fastdds-pub-mag20
+    spec:
+      nodeName: pub1
+      containers:
+      - name: publisher-mag20
+        image: hhlh1/fastdds-csv-app:latest
+        imagePullPolicy: Always
+        env:
+        - name: FASTDDS_BUILTIN_TRANSPORTS
+          value: "UDPv4"
+        - name: FASTDDS_STATISTICS
+          value: "HISTORY_LATENCY_TOPIC;NETWORK_LATENCY_TOPIC;PUBLICATION_THROUGHPUT_TOPIC;SUBSCRIPTION_THROUGHPUT_TOPIC;RTPS_SENT_TOPIC;RTPS_LOST_TOPIC;HEARTBEAT_COUNT_TOPIC;ACKNACK_COUNT_TOPIC;NACKFRAG_COUNT_TOPIC;GAP_COUNT_TOPIC;DATA_COUNT_TOPIC;RESENT_DATAS_TOPIC;SAMPLE_DATAS_TOPIC;PDP_PACKETS_TOPIC;EDP_PACKETS_TOPIC;DISCOVERY_TOPIC;PHYSICAL_DATA_TOPIC"
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        command: ["/bin/bash", "-lc"]
+        args:
+          - |
+            mkdir -p /healthz
+            echo ok > /healthz/ok
+            exec stdbuf -oL -eL /app/csv_publisher /app/data/calair_tiemporeal_ult.csv -m 06 -d 50 \
+              -c /config/profile.xml \
+              --origin-id pub-mag06
+        readinessProbe:
+          exec:
+            command: ["bash","-lc","test -f /healthz/ok"]
+          initialDelaySeconds: 1
+          periodSeconds: 1
+        livenessProbe:
+          exec:
+            command: ["bash","-c","test -f /healthz/ok"]
+          initialDelaySeconds: 1
+          periodSeconds: 1
+        volumeMounts:
+          - name: fastdds-config-vol
+            mountPath: /config
+          - name: certs-vol
+            mountPath: /certs
+            readOnly: true
+          - name: healthz
+            mountPath: /healthz
+      volumes:
+        - name: fastdds-config-vol
+          configMap:
+            name: fastdds-pub-mag20-profile
+        - name: certs-vol
+          secret:
+            secretName: dds-security-certs
+        - name: healthz
+          emptyDir: {}

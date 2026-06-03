@@ -1,0 +1,21 @@
+V	310206114614Z		1000	unknown	/C=ES/ST=MA/L=Tres Cantos/O=eProsima/CN=fastdds-server
+V	310206114627Z		1001	unknown	/C=ES/ST=MA/L=Tres Cantos/O=eProsima/CN=fastdds-client
+V	360207165253Z		1002	unknown	/C=ES/ST=MA/L=Tres Cantos/O=eProsima/CN=fastdds-monitor
+V	360207221558Z		1003	unknown	/C=ES/ST=MA/L=Tres Cantos/O=eProsima/CN=fastdds-publisher
+V	360207221617Z		1004	unknown	/C=ES/ST=MA/L=Tres Cantos/O=eProsima/CN=fastdds-subscriber
+V	310314154421Z		1005	unknown	/C=ES/ST=MA/L=Tres Cantos/O=eProsima/CN=router-pub
+V	310314154426Z		1006	unknown	/C=ES/ST=MA/L=Tres Cantos/O=eProsima/CN=router-mid
+V	310321193008Z		1007	unknown	/C=ES/ST=MA/L=Tres Cantos/O=eProsima/CN=router-final
+V	310321215547Z		1008	unknown	/C=ES/ST=MA/L=Tres Cantos/O=eProsima/CN=fastdds-server-pub
+V	310321215558Z		1009	unknown	/C=ES/ST=MA/L=Tres Cantos/O=eProsima/CN=fastdds-server-mid
+V	310321215606Z		100A	unknown	/C=ES/ST=MA/L=Tres Cantos/O=eProsima/CN=fastdds-server-final
+V	310323125047Z		100B	unknown	/C=ES/ST=MA/L=Tres Cantos/O=eProsima/CN=sensor-mag12
+V	310323125113Z		100C	unknown	/C=ES/ST=MA/L=Tres Cantos/O=eProsima/CN=aggr-mag12
+V	310323183301Z		100D	unknown	/C=ES/ST=MA/L=Tres Cantos/O=eProsima/CN=aggr-mag20
+V	310323184235Z		100E	unknown	/C=ES/ST=MA/L=Tres Cantos/O=eProsima/CN=sensor-mag20
+V	310324184833Z		100F	unknown	/C=ES/ST=MA/L=Tres Cantos/O=eProsima/CN=sensor-mag30
+V	310324184833Z		1010	unknown	/C=ES/ST=MA/L=Tres Cantos/O=eProsima/CN=aggr-mag30
+V	310324205903Z		1011	unknown	/CN=aggregation
+V	310324210117Z		1012	unknown	/C=ES/ST=MA/L=Tres Cantos/O=eProsima/CN=aggregation
+V	360323183104Z		1013	unknown	/C=ES/ST=Madrid/O=TFM/CN=intermediate_store
+V	360323183224Z		1014	unknown	/C=ES/ST=MA/L=Tres Cantos/O=eProsima/CN=intermediate_store

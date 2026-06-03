@@ -1,0 +1,93 @@
+# maincaconf.cnf - Identity CA for Fast DDS (PKI-DH)
+
+####################################################################
+[ ca ]
+default_ca = CA_default
+
+####################################################################
+[ CA_default ]
+# Base directory for the CA
+dir = /home/hugo/TFM/pkis/identity_ca
+
+# State / DB
+database        = $dir/index.txt
+serial          = $dir/serial
+crlnumber       = $dir/crlnumber
+
+# Output dirs
+new_certs_dir   = $dir/newcerts
+certs           = $dir/certs
+crl_dir         = $dir/crl
+
+# CA key/cert
+certificate     = $dir/identity_ca_cert.pem
+private_key     = $dir/private/identity_ca_key.pem
+
+# CRL (optional)
+crl             = $dir/crl/identity_ca_crl.pem
+default_crl_days= 30
+
+# Crypto defaults
+default_md      = sha256
+default_days    = 1825
+unique_subject  = no
+preserve        = no
+
+# Extensions to apply when signing CSRs (participants)
+x509_extensions = usr_cert
+
+# Policy for subjects in CSRs
+policy          = policy_anything
+
+####################################################################
+[ policy_match ]
+countryName             = match
+stateOrProvinceName     = match
+localityName            = optional
+organizationName        = match
+organizationalUnitName  = optional
+commonName              = supplied
+emailAddress            = optional
+
+[ policy_anything ]
+countryName             = optional
+stateOrProvinceName     = optional
+localityName            = optional
+organizationName        = optional
+organizationalUnitName  = optional
+commonName              = supplied
+emailAddress            = optional
+
+
+####################################################################
+[ req ]
+prompt              = no
+distinguished_name  = req_distinguished_name
+string_mask         = utf8only
+x509_extensions     = v3_ca
+
+####################################################################
+[ req_distinguished_name ]
+countryName         = ES
+stateOrProvinceName = MA
+localityName        = Madrid
+organizationName    = eProsima
+commonName          = Identity CA
+emailAddress        = identity-ca@eprosima.com
+
+####################################################################
+# Extensions for the CA certificate (self-signed)
+[ v3_ca ]
+basicConstraints        = critical, CA:true
+keyUsage                = critical, keyCertSign, cRLSign
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid:always,issuer
+
+####################################################################
+# Extensions for participant certificates (issued by this CA)
+[ usr_cert ]
+basicConstraints        = CA:false
+keyUsage                = critical, digitalSignature, keyAgreement
+extendedKeyUsage        = clientAuth, serverAuth
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid,issuer

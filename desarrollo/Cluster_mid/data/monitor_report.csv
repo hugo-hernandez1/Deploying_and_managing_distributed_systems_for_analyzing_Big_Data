@@ -1,0 +1,9 @@
+timestamp,node_id,scope_visible,topic,source_writer,target_reader,metric,value,unit,status,notes
+2026-05-11T11:45:45Z,monitor,domain,-,-,monitor,user_topics,0,count,sin muestras,no user topics discovered yet
+2026-05-11T11:46:15Z,monitor,domain,-,-,monitor,user_topics,0,count,sin muestras,no user topics discovered yet
+2026-05-11T11:46:45Z,monitor,domain,-,-,monitor,user_topics,0,count,sin muestras,no user topics discovered yet
+2026-05-11T11:47:15Z,monitor,domain,-,-,monitor,user_topics,0,count,sin muestras,no user topics discovered yet
+2026-05-11T11:47:45Z,monitor,domain,-,-,monitor,user_topics,0,count,sin muestras,no user topics discovered yet
+2026-05-11T11:48:16Z,monitor,domain,-,-,monitor,user_topics,0,count,sin muestras,no user topics discovered yet
+2026-05-11T11:48:46Z,monitor,domain,-,-,monitor,user_topics,0,count,sin muestras,no user topics discovered yet
+2026-05-11T11:49:16Z,monitor,domain,-,-,monitor,user_topics,0,count,sin muestras,no user topics discovered yet

@@ -1,0 +1,4 @@
+event_ts,node_id,scope_topic,event_type,origin_writer_id,magnitude_id,prev_seq,curr_seq,lost_messages,gap_duration_ms,notes
+2026-05-11T11:38:51Z,analysis-aggregator,air_quality_raw,FIRST_SEEN,pub-mag12,12,0,1,0,0,first sample for this flow
+2026-05-11T11:38:51Z,analysis-aggregator,air_quality_raw,FIRST_SEEN,pub-mag06,6,0,1,0,0,first sample for this flow
+2026-05-11T11:38:52Z,analysis-aggregator,air_quality_raw,FIRST_SEEN,pub-mag01,1,0,1,0,0,first sample for this flow

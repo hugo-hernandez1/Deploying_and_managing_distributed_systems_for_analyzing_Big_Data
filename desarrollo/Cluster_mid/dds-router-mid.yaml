@@ -1,0 +1,176 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dds-router-mid-config
+data:
+  router.yaml: |
+    version: v4.0
+    
+    allowlist:
+    - name: "air_quality_raw"
+    - name: "air_quality_raw_fwd"
+    - name: "air_quality_agg"
+
+    blocklist:
+      - name: "_fastdds_statistics_*"
+
+    xml:
+      raw: |
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <dds>
+          <profiles xmlns="http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles">
+            
+            <participant profile_name="DSClientMid_XML_Profile">
+              <rtps>
+                <name>DSClientMid</name>
+                <builtin>
+                  <discovery_config>
+                    <discoveryProtocol>SUPER_CLIENT</discoveryProtocol>
+                    <discoveryServersList>
+                      <locator>
+                        <udpv4>
+                          <address>10.106.45.17</address>
+                          <port>11811</port>
+                        </udpv4>
+                      </locator>
+                    </discoveryServersList>
+                  </discovery_config>
+                </builtin>
+                <propertiesPolicy>
+                  <properties>
+                    <property><name>dds.sec.auth.plugin</name><value>builtin.PKI-DH</value></property>
+                    <property><name>dds.sec.access.plugin</name><value>builtin.Access-Permissions</value></property>
+                    <property><name>dds.sec.crypto.plugin</name><value>builtin.AES-GCM-GMAC</value></property>
+                    <property><name>dds.sec.auth.builtin.PKI-DH.identity_ca</name><value>file:///certs/identity_ca_cert.pem</value></property>
+                    <property><name>dds.sec.auth.builtin.PKI-DH.identity_certificate</name><value>file:///certs/router_mid_identity_cert.pem</value></property>
+                    <property><name>dds.sec.auth.builtin.PKI-DH.private_key</name><value>file:///certs/router_mid_identity_key.pem</value></property>
+                    <property><name>dds.sec.access.builtin.Access-Permissions.permissions_ca</name><value>file:///certs/permissions_ca_cert.pem</value></property>
+                    <property><name>dds.sec.access.builtin.Access-Permissions.governance</name><value>file:///certs/governance.smime</value></property>
+                    <property><name>dds.sec.access.builtin.Access-Permissions.permissions</name><value>file:///certs/router_mid_permissions.smime</value></property>
+                    <property><name>dds.sec.crypto.builtin.AES-GCM-GMAC.rtps_protection_kind</name><value>ENCRYPT</value></property>
+                  </properties>
+                </propertiesPolicy>
+              </rtps>
+            </participant>
+
+            <transport_descriptors>
+              <transport_descriptor>
+                <transport_id>tcp_wan_mid</transport_id>
+                <type>TCPv4</type>
+                <listening_ports>
+                  <port>31811</port>
+                </listening_ports>
+                <wan_addr>192.168.56.102</wan_addr>
+              </transport_descriptor>
+            </transport_descriptors>
+
+            <participant profile_name="WAN_Mid_XML_Profile">
+              <rtps>
+                <name>WanMid</name>
+                <useBuiltinTransports>false</useBuiltinTransports>
+                <userTransports>
+                  <transport_id>tcp_wan_mid</transport_id>
+                </userTransports>
+                <builtin>
+                  <metatrafficUnicastLocatorList>
+                    <locator>
+                      <tcpv4>
+                        <address>192.168.56.102</address>
+                        <physical_port>31811</physical_port>
+                        <port>7410</port>
+                      </tcpv4>
+                    </locator>
+                  </metatrafficUnicastLocatorList>
+                  <initialPeersList>
+                    <locator>
+                      <tcpv4>
+                        <address>192.168.56.101</address>
+                        <physical_port>31812</physical_port>
+                        <port>7410</port>
+                      </tcpv4>
+                    </locator>
+                    <locator>
+                      <tcpv4>
+                        <address>192.168.56.103</address>
+                        <physical_port>31813</physical_port>
+                        <port>7410</port>
+                      </tcpv4>
+                    </locator>
+                  </initialPeersList>
+                </builtin>
+                <propertiesPolicy>
+                  <properties>
+                    <property><name>dds.sec.auth.plugin</name><value>builtin.PKI-DH</value></property>
+                    <property><name>dds.sec.access.plugin</name><value>builtin.Access-Permissions</value></property>
+                    <property><name>dds.sec.crypto.plugin</name><value>builtin.AES-GCM-GMAC</value></property>
+                    <property><name>dds.sec.auth.builtin.PKI-DH.identity_ca</name><value>file:///certs/identity_ca_cert.pem</value></property>
+                    <property><name>dds.sec.auth.builtin.PKI-DH.identity_certificate</name><value>file:///certs/router_mid_identity_cert.pem</value></property>
+                    <property><name>dds.sec.auth.builtin.PKI-DH.private_key</name><value>file:///certs/router_mid_identity_key.pem</value></property>
+                    <property><name>dds.sec.access.builtin.Access-Permissions.permissions_ca</name><value>file:///certs/permissions_ca_cert.pem</value></property>
+                    <property><name>dds.sec.access.builtin.Access-Permissions.governance</name><value>file:///certs/governance.smime</value></property>
+                    <property><name>dds.sec.access.builtin.Access-Permissions.permissions</name><value>file:///certs/router_mid_permissions.smime</value></property>
+                    <property><name>dds.sec.crypto.builtin.AES-GCM-GMAC.rtps_protection_kind</name><value>ENCRYPT</value></property>
+                  </properties>
+                </propertiesPolicy>
+              </rtps>
+            </participant>
+          </profiles>
+        </dds>
+
+    participants:
+      - name: "DSClientMid"
+        kind: xml
+        profile: "DSClientMid_XML_Profile"
+
+      - name: "WanMid"
+        kind: xml
+        profile: "WAN_Mid_XML_Profile"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dds-router-mid
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dds-router-mid
+  template:
+    metadata:
+      labels:
+        app: dds-router-mid
+    spec:
+      nodeName: mid
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      initContainers:
+      - name: wait-for-discovery
+        image: busybox
+        command: ['sh', '-c', 'until nc -zu 10.106.45.17 11811; do echo waiting for discovery server mid; sleep 2; done']
+      containers:
+        - name: router
+          image: hhlh1/ubuntu-fastdds-suite:v3.2.2-secure
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "400m"
+          command: ["/bin/bash", "-c"]
+          args:
+            - |
+              ddsrouter -c /config/router.yaml -d
+          volumeMounts:
+            - name: config-vol
+              mountPath: /config
+            - name: certs-vol
+              mountPath: /certs
+              readOnly: true
+      volumes:
+        - name: config-vol
+          configMap:
+            name: dds-router-mid-config
+        - name: certs-vol
+          secret:
+            secretName: dds-security-certs

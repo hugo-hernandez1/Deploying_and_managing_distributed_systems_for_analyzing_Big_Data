@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: net-sniffer-pub1
+spec:
+  hostNetwork: true
+  hostPID: true
+  containers:
+  - name: tcpdump
+    image: nicolaka/netshoot
+    securityContext:
+      privileged: true
+      capabilities:
+        add: ["NET_ADMIN", "NET_RAW"]
+    command: ["/bin/sh", "-c"]
+    args:
+      - |
+        echo "Sniffer ready";
+        sleep 360000

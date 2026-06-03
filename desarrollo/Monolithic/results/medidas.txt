@@ -1,0 +1,4 @@
+cada 250 ms
+Fast_DDS_Latency
+Publication_Throughtput
+Subscription_Throughtput
